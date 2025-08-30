@@ -37,7 +37,8 @@ const Dashboard = () => {
       setRecentReports(reportsResponse.data.reports);
     } catch (error) {
       console.error('Dashboard data fetch error:', error);
-      toast.error('Failed to load dashboard data');
+      const errorMessage = error.response?.data?.message || 'Failed to load dashboard data';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

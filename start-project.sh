@@ -1,27 +1,46 @@
 #!/bin/bash
 
-echo "Starting Community Mangrove Watch..."
-echo
+echo "Starting Community Mangrove Watch Project..."
 
-echo "Starting Backend Server..."
+echo
+echo "Step 1: Installing Backend Dependencies..."
 cd backend
-gnome-terminal --title="Backend Server" -- bash -c "npm run dev; exec bash" &
-# For macOS, use: open -a Terminal "npm run dev"
-# For other Linux distros, you might need to adjust the terminal command
+npm install
+if [ $? -ne 0 ]; then
+    echo "Error installing backend dependencies"
+    exit 1
+fi
 
 echo
-echo "Starting Frontend Server..."
+echo "Step 2: Installing Frontend Dependencies..."
+cd ../frontend
+npm install
+if [ $? -ne 0 ]; then
+    echo "Error installing frontend dependencies"
+    exit 1
+fi
+
+echo
+echo "Step 3: Starting Backend Server..."
+cd ../backend
+gnome-terminal --title="Backend Server" -- bash -c "npm run dev; exec bash" &
+# Alternative for different terminals:
+# xterm -title "Backend Server" -e "npm run dev" &
+# konsole --title "Backend Server" -e bash -c "npm run dev; exec bash" &
+
+echo
+echo "Step 4: Starting Frontend Server..."
 cd ../frontend
 gnome-terminal --title="Frontend Server" -- bash -c "npm run dev; exec bash" &
-# For macOS, use: open -a Terminal "npm run dev"
-# For other Linux distros, you might need to adjust the terminal command
+# Alternative for different terminals:
+# xterm -title "Frontend Server" -e "npm run dev" &
+# konsole --title "Frontend Server" -e bash -c "npm run dev; exec bash" &
 
 echo
 echo "Both servers are starting..."
-echo "Backend: http://localhost:5000"
-echo "Frontend: http://localhost:3000"
+echo "Backend will be available at: http://localhost:5000"
+echo "Frontend will be available at: http://localhost:3000"
 echo
-echo "Make sure MongoDB is running before starting the backend!"
+echo "IMPORTANT: Make sure you have created the .env file in the backend directory!"
 echo
-echo "Press any key to continue..."
-read -n 1
+read -p "Press Enter to continue..."

@@ -1,6 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Configure axios defaults
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -66,21 +69,23 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (userData) => {
-        try {
-            const response = await axios.post('/api/auth/register', userData);
+    try {
+        const response = await axios.post('/api/auth/register', userData);
 
-            const { token: newToken, user: newUser } = response.data;
-            setToken(newToken);
-            setUser(newUser);
+        const { token: newToken, user: newUser } = response.data;
+        setToken(newToken);
+        setUser(newUser);
 
-            return { success: true };
-        } catch (error) {
-            return {
-                success: false,
-                message: error.response?.data?.message || 'Registration failed'
-            };
-        }
-    };
+        
+        return { success: true };
+    } catch (error) {
+        return {
+            success: false,
+            message: error.response?.data?.message || 'Registration failed'
+        };
+    }
+};
+
 
     const logout = () => {
         setUser(null);

@@ -1,151 +1,173 @@
-# Community Mangrove Watch 🌿
+# 🌿 Community Mangrove Watch
 
-A participatory monitoring system for mangrove forests where coastal communities, fishermen, and citizen scientists can report environmental incidents and threats.
+A comprehensive participatory monitoring system for mangrove forest conservation, enabling communities, NGOs, government agencies, and researchers to collaborate in protecting these vital ecosystems.
 
-## 🌟 Features
+## 🚀 Features
 
-### 🔐 Authentication & User Management
+### Core Functionality
+- **Incident Reporting**: Submit detailed reports with photos, location data, and impact assessments
+- **Role-Based Access**: Different interfaces for community members, NGOs, government officials, and researchers
+- **Real-time Monitoring**: Track mangrove health and threats with comprehensive dashboards
+- **Photo Documentation**: Upload and manage evidence photos with drag-and-drop interface
+- **Geolocation Tracking**: Precise location mapping for accurate incident reporting
+- **Validation System**: Multi-tier validation process for report accuracy
 
-- **User Registration & Login** with JWT authentication
-- **Role-based Access Control**:
-  - **Community Members**: Submit reports, view their own reports
-  - **NGOs/Government**: Validate reports, access admin panel
-  - **Researchers**: View analytics and download data
+### User Roles & Permissions
+- **Community Members**: Submit reports, view own reports and public approved reports
+- **NGO Staff**: Validate reports, access analytics, manage community engagement
+- **Government Officials**: Full administrative access, validation, and policy enforcement
+- **Researchers**: Access approved reports for research and analysis
 
-### 📝 Incident Reporting System
+### Advanced Features
+- **Gamification System**: Earn points and achievements for contributions
+- **Data Analytics**: Comprehensive reporting and visualization tools
+- **Export Capabilities**: Download reports and data for external analysis
+- **AI/ML Integration**: Automated report analysis and validation suggestions
+- **Mobile Responsive**: Works seamlessly across all devices
 
-- **Comprehensive Report Creation**:
-  - Title, description, and categorization
-  - Photo uploads (stored locally)
-  - GPS coordinates from browser
-  - Severity assessment
-  - Impact evaluation
-- **Report Status Tracking**: Pending → Approved/Rejected/Under Investigation
-- **Geolocation Support** with address mapping
-
-### 🤖 AI/ML Integration (Stub)
-
-- **Mock AI Validation** for uploaded reports
-- **Placeholder for Real AI** implementation
-- **Automated Risk Assessment** simulation
-
-### 🏆 Gamification System
-
-- **Points System**: Earn points for valid reports
-- **Leaderboard**: Track top contributors
-- **Achievement Tracking**: Monitor user progress
-
-### 📊 Dashboard & Analytics
-
-- **Admin Panel**: Report validation and management
-- **Analytics Dashboard**: Data visualization and insights
-- **Export Functionality**: CSV data export
-- **Interactive Charts**: Category and status distributions
-
-## 🛠️ Tech Stack
+## 🛠️ Technology Stack
 
 ### Backend
-
-- **Node.js** with **Express.js** framework
-- **MongoDB** with **Mongoose** ODM
+- **Node.js** with Express.js framework
+- **MongoDB** with Mongoose ODM
 - **JWT** for authentication
 - **Multer** for file uploads
 - **Express Validator** for input validation
 - **Helmet** for security headers
+- **CORS** for cross-origin requests
 
 ### Frontend
-
-- **React.js** with **Vite** build tool
-- **TailwindCSS** for styling
+- **React 19** with modern hooks
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
 - **React Router** for navigation
+- **Axios** for API communication
+- **React Hook Form** for form management
+- **React Dropzone** for file uploads
 - **Recharts** for data visualization
-- **React Hook Form** for form handling
 - **Lucide React** for icons
 - **React Hot Toast** for notifications
 
-## 📁 Project Structure
+### Development Tools
+- **ESLint** for code linting
+- **PostCSS** for CSS processing
+- **Autoprefixer** for CSS compatibility
 
-```
-community-mangrove-watch/
-├── backend/                 # Express.js server
-│   ├── models/             # MongoDB schemas
-│   ├── routes/             # API endpoints
-│   ├── middleware/         # Auth & upload middleware
-│   ├── uploads/            # File storage
-│   ├── server.js           # Main server file
-│   ├── package.json        # Backend dependencies
-│   └── .env.example        # Environment variables template
-├── frontend/               # React.js application
-│   ├── src/
-│   │   ├── components/     # Reusable components
-│   │   ├── pages/          # Page components
-│   │   ├── contexts/       # React contexts
-│   │   └── assets/         # Static assets
-│   ├── package.json        # Frontend dependencies
-│   └── vite.config.js      # Vite configuration
-└── README.md               # This file
-```
+## 📋 Prerequisites
+
+Before running this project, make sure you have the following installed:
+
+- **Node.js** (v18 or higher)
+- **npm** or **yarn**
+- **MongoDB** (local installation or MongoDB Atlas)
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- **Node.js** (v16 or higher)
-- **MongoDB** (v5 or higher)
-- **npm** or **yarn**
-
 ### 1. Clone the Repository
-
 ```bash
 git clone <repository-url>
 cd community-mangrove-watch
 ```
 
 ### 2. Backend Setup
-
 ```bash
 cd backend
-
-# Install dependencies
 npm install
+```
 
-# Create environment file
-cp .env.example .env
-
-# Edit .env file with your configuration
-# Update MONGODB_URI, JWT_SECRET, etc.
-
-# Start MongoDB (make sure MongoDB is running)
-# On Windows: Start MongoDB service
-# On macOS: brew services start mongodb-community
-# On Linux: sudo systemctl start mongod
-
-# Start the server
-npm run dev
+Create a `.env` file in the backend directory:
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/mangrove-watch
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+MAX_FILE_SIZE=5242880
+UPLOAD_PATH=./uploads
+CORS_ORIGIN=http://localhost:3000
+LOG_LEVEL=debug
 ```
 
 ### 3. Frontend Setup
-
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
+```
 
-# Start the development server
+### 4. Start the Application
+
+#### Option A: Using the provided scripts
+```bash
+# From the root directory
 npm run dev
 ```
 
-### 4. Access the Application
+#### Option B: Manual start
+```bash
+# Terminal 1 - Backend
+cd backend
+npm run dev
 
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000
-- **API Health Check**: http://localhost:5000/api/health
+# Terminal 2 - Frontend
+cd frontend
+npm run dev
+```
 
-## ⚙️ Environment Configuration
+### 5. Access the Application
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- API Documentation: http://localhost:5000/api/health
 
-### Backend (.env)
+## 📁 Project Structure
 
+```
+community-mangrove-watch/
+├── backend/
+│   ├── middleware/
+│   │   ├── auth.js          # Authentication middleware
+│   │   └── upload.js        # File upload middleware
+│   ├── models/
+│   │   ├── Report.js        # Report data model
+│   │   └── User.js          # User data model
+│   ├── routes/
+│   │   ├── auth.js          # Authentication routes
+│   │   ├── reports.js       # Report management routes
+│   │   └── users.js         # User management routes
+│   ├── uploads/             # File upload directory
+│   ├── server.js            # Main server file
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   │   ├── Navbar.jsx
+│   │   │   │   └── Footer.jsx
+│   │   │   └── DebugInfo.jsx
+│   │   ├── contexts/
+│   │   │   └── AuthContext.jsx
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Reports.jsx
+│   │   │   ├── SubmitReport.jsx
+│   │   │   ├── ReportDetail.jsx
+│   │   │   ├── Profile.jsx
+│   │   │   ├── Leaderboard.jsx
+│   │   │   ├── AdminPanel.jsx
+│   │   │   └── Analytics.jsx
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── package.json
+├── README.md
+└── package.json
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+#### Backend (.env)
 ```env
 # Server Configuration
 PORT=5000
@@ -168,147 +190,155 @@ CORS_ORIGIN=http://localhost:3000
 LOG_LEVEL=debug
 ```
 
-## 🔧 API Endpoints
+### Database Setup
+
+The application uses MongoDB with the following collections:
+- **users**: User accounts and profiles
+- **reports**: Incident reports and metadata
+
+### File Upload Configuration
+
+- **Maximum file size**: 5MB per file
+- **Maximum files per upload**: 5 photos
+- **Supported formats**: JPEG, PNG, GIF
+- **Storage location**: `backend/uploads/`
+
+## 🔐 Authentication & Authorization
+
+### User Roles
+1. **Community** (default): Can submit reports and view own reports
+2. **NGO**: Can validate reports and access analytics
+3. **Government**: Full administrative access
+4. **Researcher**: Can view approved reports for research
+
+### JWT Token
+- **Expiration**: 7 days
+- **Refresh**: Available via `/api/auth/refresh`
+- **Storage**: Local storage (frontend)
+
+## 📊 API Endpoints
 
 ### Authentication
-
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 - `GET /api/auth/profile` - Get user profile
 - `PUT /api/auth/profile` - Update user profile
+- `POST /api/auth/change-password` - Change password
+- `POST /api/auth/refresh` - Refresh JWT token
 
 ### Reports
-
-- `GET /api/reports` - Get all reports (filtered by user role)
+- `GET /api/reports` - Get reports with filtering and pagination
 - `POST /api/reports` - Submit new report
 - `GET /api/reports/:id` - Get specific report
 - `PUT /api/reports/:id` - Update report
 - `DELETE /api/reports/:id` - Delete report
-- `PUT /api/reports/:id/validate` - Validate report (NGO/Govt only)
-- `POST /api/reports/:id/ai-analysis` - AI analysis (stub)
-
-### Statistics
-
-- `GET /api/reports/stats/summary` - Dashboard summary stats
-- `GET /api/reports/stats` - Admin panel comprehensive stats
+- `POST /api/reports/:id/validate` - Validate report (NGO/Govt)
+- `GET /api/reports/stats/summary` - Get summary statistics
+- `GET /api/reports/stats` - Get comprehensive statistics
 
 ### Users
+- `GET /api/users/leaderboard` - Get leaderboard
+- `GET /api/users/profile/:id` - Get user profile
+- `GET /api/users/search` - Search users
+- `GET /api/users/stats` - Get user statistics
+- `PUT /api/users/:id/status` - Update user status
+- `GET /api/users/me/reports` - Get current user's reports
+- `GET /api/users/me/achievements` - Get user achievements
 
-- `GET /api/users/leaderboard` - User leaderboard
-- `GET /api/users/profile` - User profile
+## 🎯 Usage Examples
 
-## 👥 User Roles & Permissions
+### Submitting a Report
+1. Navigate to "Submit Report"
+2. Fill in incident details
+3. Upload photos (drag & drop)
+4. Set location (GPS or manual entry)
+5. Add impact assessment
+6. Submit for validation
 
-### Community Members
+### Validating Reports (NGO/Govt)
+1. Access Admin Panel
+2. View pending reports
+3. Review evidence and details
+4. Add validation notes
+5. Approve or reject
 
-- ✅ Submit incident reports
-- ✅ View own reports
-- ✅ Upload photos
-- ✅ Earn points for valid reports
-- ❌ Validate other reports
-- ❌ Access admin panel
+### Viewing Analytics
+1. Access Analytics page (Researchers)
+2. View comprehensive statistics
+3. Export data for research
+4. Generate reports
 
-### NGOs & Government Officials
+## 🧪 Testing
 
-- ✅ All Community Member permissions
-- ✅ Validate and approve/reject reports
-- ✅ Access admin panel
-- ✅ View comprehensive statistics
-- ✅ Export data
-- ✅ AI analysis access
+### Backend Testing
+```bash
+cd backend
+npm test
+```
 
-### Researchers
+### Frontend Testing
+```bash
+cd frontend
+npm test
+```
 
-- ✅ View all reports
-- ✅ Access analytics dashboard
-- ✅ Export data for research
-- ✅ View comprehensive statistics
-- ❌ Submit reports
-- ❌ Validate reports
+## 🚀 Deployment
 
-## 🎯 Key Features in Detail
+### Backend Deployment
+1. Set production environment variables
+2. Configure MongoDB connection
+3. Set up file storage (consider cloud storage for production)
+4. Deploy to your preferred platform (Heroku, AWS, etc.)
 
-### Report Submission
+### Frontend Deployment
+1. Build the application: `npm run build`
+2. Deploy the `dist` folder to your hosting platform
+3. Configure environment variables for production API
 
-1. **Location Detection**: Automatic GPS coordinates from browser
-2. **Photo Upload**: Multiple photo support with local storage
-3. **Category Classification**: Cutting, dumping, reclamation, pollution, other
-4. **Severity Assessment**: Low, medium, high, critical
-5. **Impact Evaluation**: Biodiversity, carbon storage, coastal protection
-
-### Admin Panel
-
-1. **Report Management**: Approve, reject, or mark for investigation
-2. **Statistics Dashboard**: Real-time metrics and charts
-3. **Filtering & Search**: Advanced report filtering
-4. **Data Export**: CSV export functionality
-5. **User Management**: Monitor user activity
-
-### Analytics Dashboard
-
-1. **Interactive Charts**: Bar charts, pie charts, time series
-2. **Geographic Distribution**: Regional incident mapping
-3. **Trend Analysis**: Temporal patterns and insights
-4. **Data Export**: Research-friendly data formats
-
-## 🔒 Security Features
-
-- **JWT Authentication** with secure token storage
-- **Role-based Access Control** (RBAC)
-- **Input Validation** with express-validator
-- **File Upload Security** with file type and size validation
-- **CORS Protection** for cross-origin requests
-- **Helmet.js** for security headers
-
-## 📱 Responsive Design
-
-- **Mobile-first** approach
-- **Progressive Web App** features
-- **Touch-friendly** interface
-- **Cross-browser** compatibility
-
-## 🚀 Future Enhancements
-
-### AI/ML Integration
-
-- **Image Recognition** for automatic damage assessment
-- **Natural Language Processing** for report analysis
-- **Predictive Analytics** for threat prediction
-- **Satellite Image Integration** for large-scale monitoring
-
-### Advanced Features
-
-- **Real-time Notifications** for urgent incidents
-- **Mobile App** for offline reporting
-- **Blockchain Integration** for data integrity
-- **API Integration** with external environmental databases
+### Environment Variables for Production
+```env
+NODE_ENV=production
+MONGODB_URI=your-production-mongodb-uri
+JWT_SECRET=your-production-jwt-secret
+CORS_ORIGIN=your-frontend-domain
+```
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## 📄 License
+## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
-- **Mangrove Conservation** organizations worldwide
-- **Coastal Communities** for their environmental stewardship
-- **Open Source Community** for the amazing tools and libraries
+- Community members and conservationists worldwide
+- Environmental organizations supporting mangrove protection
+- Open source community for the amazing tools and libraries
 
 ## 📞 Support
 
 For support and questions:
-
 - Create an issue in the repository
 - Contact the development team
 - Check the documentation
 
+## 🔮 Future Enhancements
+
+- **Mobile App**: Native mobile application
+- **Real-time Notifications**: Push notifications for report updates
+- **Advanced Analytics**: Machine learning for trend analysis
+- **GIS Integration**: Advanced mapping and spatial analysis
+- **Blockchain**: Immutable record keeping
+- **API Integration**: Connect with external conservation databases
+- **Multi-language Support**: Internationalization
+- **Offline Support**: Work without internet connection
+
 ---
 
-**🌿 Together, let's protect our mangrove forests for future generations! 🌿**
+**Made with ❤️ for mangrove conservation**

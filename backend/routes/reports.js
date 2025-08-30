@@ -140,7 +140,11 @@ router.get('/', [
   query('reporter')
     .optional()
     .isMongoId()
-    .withMessage('Invalid reporter ID')
+    .withMessage('Invalid reporter ID'),
+  query('search')
+    .optional()
+    .isString()
+    .withMessage('Search must be a string')
 ], async (req, res) => {
   try {
     // Check for validation errors
@@ -158,6 +162,7 @@ router.get('/', [
       status,
       category,
       reporter,
+      search,
       sortBy = 'createdAt',
       sortOrder = 'desc'
     } = req.query;
@@ -181,6 +186,29 @@ router.get('/', [
     if (status) filter.status = status;
     if (category) filter.category = category;
     if (reporter) filter.reporter = reporter;
+
+    // Add search functionality
+    if (search && search.trim()) {
+      const searchRegex = new RegExp(search.trim(), 'i');
+      const searchFilter = {
+        $or: [
+          { title: searchRegex },
+          { description: searchRegex },
+          { 'location.address.city': searchRegex }
+        ]
+      };
+
+      // Combine with existing role-based filter
+      if (filter.$or) {
+        // If there's already a role-based $or filter, we need to combine them
+        const roleFilter = { $or: filter.$or };
+        delete filter.$or;
+        filter.$and = [roleFilter, searchFilter];
+      } else {
+        // No existing $or filter, just use search
+        Object.assign(filter, searchFilter);
+      }
+    }
 
     // Build sort
     const sort = {};
@@ -422,7 +450,7 @@ router.put('/:id/validate', [
     // Update report status
     if (status === 'approved') {
       await report.approve(req.user._id, validationNotes);
-      
+
       // Award points to reporter
       await User.findByIdAndUpdate(report.reporter, {
         $inc: { reportsValidated: 1, points: 50 }

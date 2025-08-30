@@ -1,22 +1,32 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Eye, EyeOff, Mail, Lock, User, Building, MapPin, AlertCircle, CheckCircle } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  Building,
+  MapPin,
+  AlertCircle,
+  CheckCircle,
+} from "lucide-react";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    role: 'community',
-    organization: '',
-    city: '',
-    state: '',
-    country: ''
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    role: "community",
+    organization: "",
+    city: "",
+    state: "",
+    country: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -27,24 +37,40 @@ const Register = () => {
   const navigate = useNavigate();
 
   const roles = [
-    { value: 'community', label: 'Community Member', description: 'Local residents, fishermen, and community activists' },
-    { value: 'ngo', label: 'NGO Staff', description: 'Non-governmental organization employees' },
-    { value: 'government', label: 'Government Official', description: 'Local, state, or federal government employees' },
-    { value: 'researcher', label: 'Researcher', description: 'Scientists, academics, and research institutions' }
+    {
+      value: "community",
+      label: "Community Member",
+      description: "Local residents, fishermen, and community activists",
+    },
+    {
+      value: "ngo",
+      label: "NGO Staff",
+      description: "Non-governmental organization employees",
+    },
+    {
+      value: "government",
+      label: "Government Official",
+      description: "Local, state, or federal government employees",
+    },
+    {
+      value: "researcher",
+      label: "Researcher",
+      description: "Scientists, academics, and research institutions",
+    },
   ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
@@ -54,45 +80,49 @@ const Register = () => {
 
     // Username validation
     if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
+      newErrors.username = "Username is required";
     } else if (formData.username.length < 3) {
-      newErrors.username = 'Username must be at least 3 characters';
+      newErrors.username = "Username must be at least 3 characters";
     } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-      newErrors.username = 'Username can only contain letters, numbers, and underscores';
+      newErrors.username =
+        "Username can only contain letters, numbers, and underscores";
     }
 
     // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = "Please enter a valid email";
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     // Confirm password validation
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
+      newErrors.confirmPassword = "Please confirm your password";
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
     // Name validation
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = "First name is required";
     }
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = "Last name is required";
     }
 
     // Organization validation for NGO/Government roles
-    if ((formData.role === 'ngo' || formData.role === 'government') && !formData.organization.trim()) {
-      newErrors.organization = 'Organization is required for this role';
+    if (
+      (formData.role === "ngo" || formData.role === "government") &&
+      !formData.organization.trim()
+    ) {
+      newErrors.organization = "Organization is required for this role";
     }
 
     setErrors(newErrors);
@@ -101,14 +131,15 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setIsLoading(true);
-    
+
     try {
+      // Build userData, only including organization/location if present
       const userData = {
         username: formData.username,
         email: formData.email,
@@ -116,25 +147,33 @@ const Register = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         role: formData.role,
-        organization: formData.organization || undefined,
-        location: {
-          city: formData.city || undefined,
-          state: formData.state || undefined,
-          country: formData.country || undefined
-        }
       };
+      if (formData.organization && formData.organization.trim() !== "") {
+        userData.organization = formData.organization;
+      }
+      const location = {};
+      if (formData.city && formData.city.trim() !== "")
+        location.city = formData.city;
+      if (formData.state && formData.state.trim() !== "")
+        location.state = formData.state;
+      if (formData.country && formData.country.trim() !== "")
+        location.country = formData.country;
+      if (Object.keys(location).length > 0) {
+        userData.location = location;
+      }
 
       const result = await register(userData);
-      
       if (result.success) {
-        toast.success('Registration successful! Welcome to Community Mangrove Watch.');
-        navigate('/dashboard');
+        toast.success(
+          "Registration successful! Welcome to Community Mangrove Watch."
+        );
+        navigate("/dashboard");
       } else {
-        toast.error(result.message || 'Registration failed. Please try again.');
+        toast.error(result.message || "Registration failed. Please try again.");
       }
     } catch (error) {
-      toast.error('An unexpected error occurred. Please try again.');
-      console.error('Registration error:', error);
+      toast.error("An unexpected error occurred. Please try again.");
+      console.error("Registration error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -152,7 +191,8 @@ const Register = () => {
             Join the Community
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Create your account and start contributing to mangrove conservation efforts worldwide
+            Create your account and start contributing to mangrove conservation
+            efforts worldwide
           </p>
         </div>
 
@@ -166,7 +206,10 @@ const Register = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="firstName"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     First Name *
                   </label>
                   <input
@@ -177,7 +220,9 @@ const Register = () => {
                     value={formData.firstName}
                     onChange={handleChange}
                     className={`block w-full px-4 py-3 border-2 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-200 ${
-                      errors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                      errors.firstName
+                        ? "border-red-300 bg-red-50"
+                        : "border-gray-200 hover:border-gray-300"
                     }`}
                     placeholder="Enter your first name"
                   />
@@ -190,7 +235,10 @@ const Register = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="lastName"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Last Name *
                   </label>
                   <input
@@ -201,7 +249,9 @@ const Register = () => {
                     value={formData.lastName}
                     onChange={handleChange}
                     className={`block w-full px-4 py-3 border-2 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-200 ${
-                      errors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                      errors.lastName
+                        ? "border-red-300 bg-red-50"
+                        : "border-gray-200 hover:border-gray-300"
                     }`}
                     placeholder="Enter your last name"
                   />
@@ -222,7 +272,10 @@ const Register = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="username"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Username *
                   </label>
                   <div className="relative">
@@ -237,7 +290,9 @@ const Register = () => {
                       value={formData.username}
                       onChange={handleChange}
                       className={`block w-full pl-12 pr-4 py-3 border-2 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-200 ${
-                        errors.username ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                        errors.username
+                          ? "border-red-300 bg-red-50"
+                          : "border-gray-200 hover:border-gray-300"
                       }`}
                       placeholder="Choose a username"
                     />
@@ -251,7 +306,10 @@ const Register = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Email Address *
                   </label>
                   <div className="relative">
@@ -267,7 +325,9 @@ const Register = () => {
                       value={formData.email}
                       onChange={handleChange}
                       className={`block w-full pl-12 pr-4 py-3 border-2 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-200 ${
-                        errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                        errors.email
+                          ? "border-red-300 bg-red-50"
+                          : "border-gray-200 hover:border-gray-300"
                       }`}
                       placeholder="Enter your email"
                     />
@@ -289,7 +349,10 @@ const Register = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Password *
                   </label>
                   <div className="relative">
@@ -299,12 +362,14 @@ const Register = () => {
                     <input
                       id="password"
                       name="password"
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword ? "text" : "password"}
                       required
                       value={formData.password}
                       onChange={handleChange}
                       className={`block w-full pl-12 pr-12 py-3 border-2 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-200 ${
-                        errors.password ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                        errors.password
+                          ? "border-red-300 bg-red-50"
+                          : "border-gray-200 hover:border-gray-300"
                       }`}
                       placeholder="Create a password"
                     />
@@ -329,7 +394,10 @@ const Register = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Confirm Password *
                   </label>
                   <div className="relative">
@@ -339,19 +407,23 @@ const Register = () => {
                     <input
                       id="confirmPassword"
                       name="confirmPassword"
-                      type={showConfirmPassword ? 'text' : 'password'}
+                      type={showConfirmPassword ? "text" : "password"}
                       required
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       className={`block w-full pl-12 pr-12 py-3 border-2 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-200 ${
-                        errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                        errors.confirmPassword
+                          ? "border-red-300 bg-red-50"
+                          : "border-gray-200 hover:border-gray-300"
                       }`}
                       placeholder="Confirm your password"
                     />
                     <button
                       type="button"
                       className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="h-5 w-5" />
@@ -381,10 +453,14 @@ const Register = () => {
                     key={role.value}
                     className={`relative border-2 rounded-xl p-6 cursor-pointer transition-all duration-200 hover:shadow-md ${
                       formData.role === role.value
-                        ? 'border-green-500 bg-green-50 shadow-lg'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                        ? "border-green-500 bg-green-50 shadow-lg"
+                        : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
-                    onClick={() => handleChange({ target: { name: 'role', value: role.value } })}
+                    onClick={() =>
+                      handleChange({
+                        target: { name: "role", value: role.value },
+                      })
+                    }
                   >
                     <div className="flex items-start">
                       <input
@@ -399,7 +475,9 @@ const Register = () => {
                         <label className="block text-sm font-semibold text-gray-900 cursor-pointer">
                           {role.label}
                         </label>
-                        <p className="text-sm text-gray-600 mt-2 leading-relaxed">{role.description}</p>
+                        <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+                          {role.description}
+                        </p>
                       </div>
                     </div>
                     {formData.role === role.value && (
@@ -413,13 +491,16 @@ const Register = () => {
             </div>
 
             {/* Organization (for NGO/Government) */}
-            {(formData.role === 'ngo' || formData.role === 'government') && (
+            {(formData.role === "ngo" || formData.role === "government") && (
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-3">
                   Organization Details
                 </h3>
                 <div className="space-y-2">
-                  <label htmlFor="organization" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="organization"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Organization Name *
                   </label>
                   <div className="relative">
@@ -434,7 +515,9 @@ const Register = () => {
                       value={formData.organization}
                       onChange={handleChange}
                       className={`block w-full pl-12 pr-4 py-3 border-2 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all duration-200 ${
-                        errors.organization ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                        errors.organization
+                          ? "border-red-300 bg-red-50"
+                          : "border-gray-200 hover:border-gray-300"
                       }`}
                       placeholder="Enter organization name"
                     />
@@ -456,7 +539,10 @@ const Register = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="city"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     City
                   </label>
                   <div className="relative">
@@ -476,7 +562,10 @@ const Register = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="state" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="state"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     State/Province
                   </label>
                   <input
@@ -491,7 +580,10 @@ const Register = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="country"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Country
                   </label>
                   <input
@@ -520,7 +612,7 @@ const Register = () => {
                     Creating account...
                   </div>
                 ) : (
-                  'Create Account'
+                  "Create Account"
                 )}
               </button>
             </div>
@@ -533,7 +625,9 @@ const Register = () => {
                 <div className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">Already have an account?</span>
+                <span className="px-4 bg-white text-gray-500">
+                  Already have an account?
+                </span>
               </div>
             </div>
           </div>
@@ -552,12 +646,18 @@ const Register = () => {
         {/* Additional Info */}
         <div className="text-center text-sm text-gray-600 mt-8">
           <p>
-            By creating an account, you agree to our{' '}
-            <a href="#" className="text-green-600 hover:text-green-500 font-medium transition-colors">
+            By creating an account, you agree to our{" "}
+            <a
+              href="#"
+              className="text-green-600 hover:text-green-500 font-medium transition-colors"
+            >
               Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href="#" className="text-green-600 hover:text-green-500 font-medium transition-colors">
+            </a>{" "}
+            and{" "}
+            <a
+              href="#"
+              className="text-green-600 hover:text-green-500 font-medium transition-colors"
+            >
               Privacy Policy
             </a>
           </p>

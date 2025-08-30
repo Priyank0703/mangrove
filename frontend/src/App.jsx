@@ -14,7 +14,6 @@ import Profile from './pages/Profile';
 import Leaderboard from './pages/Leaderboard';
 import AdminPanel from './pages/AdminPanel';
 import Analytics from './pages/Analytics';
-import DebugInfo from './components/DebugInfo';
 import './App.css';
 
 // Protected Route Component
@@ -168,9 +167,6 @@ function AppContent() {
       </main>
 
       {user && <Footer />}
-
-      {/* Debug component - remove in production */}
-      <DebugInfo />
 
       <Toaster
         position="top-right"
